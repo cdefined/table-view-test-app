@@ -1,13 +1,18 @@
 import { useGetPostsQuery } from '../services/postsApi';
-import { Spin, Table } from 'antd';
+import { Alert, Spin, Table } from 'antd';
 
 function PostsTable() {
-  const { data, isError, isLoading } = useGetPostsQuery();
+  const { data, isError, error, isLoading } = useGetPostsQuery();
   const columns = [
     {
       title: 'Id',
       dataIndex: 'id',
       key: 'id',
+    },
+    {
+      title: 'User',
+      dataIndex: 'userId',
+      key: 'userId',
     },
     {
       title: 'Title',
@@ -19,19 +24,14 @@ function PostsTable() {
       dataIndex: 'body',
       key: 'body',
     },
-    {
-      title: 'User',
-      dataIndex: 'userId',
-      key: 'userId',
-    },
   ];
 
   return (
     <>
       <div>
         {isLoading && <Spin />}
-        {isError && 'Error'}
-        {data && <Table dataSource={data} columns={columns} rowKey="id"/>}
+        {isError && <Alert message={error.error} type="error" />}
+        {data && <Table dataSource={data} columns={columns} rowKey="id" />}
       </div>
     </>
   );
